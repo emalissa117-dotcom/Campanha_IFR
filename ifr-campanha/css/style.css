@@ -1,0 +1,692 @@
+/* =========================================================================
+   CAMPANHA HORAS DE VOO IFR — style.css
+   Design system: painel de aviônica premium.
+   Paleta: azul-noite, petróleo, prata-metálico e dourado.
+   ========================================================================= */
+
+:root {
+  /* ---- Cores ---- */
+  --navy-950: #060e1c;
+  --navy-900: #0a1730;
+  --navy-800: #0f2140;
+  --navy-700: #163057;
+  --petrol-700: #0f3f47;
+  --petrol-600: #155760;
+  --petrol-500: #1c6e79;
+  --gold-300: #eecd88;
+  --gold-400: #d9a441;
+  --gold-500: #c28a2c;
+  --metal-50: #f5f7fa;
+  --metal-100: #eaeef3;
+  --metal-200: #d9e0e8;
+  --metal-300: #b9c4d0;
+  --ink-900: #0a1220;
+  --ink-700: #2a3648;
+  --ink-500: #5c6b80;
+  --reserved-500: #3b4655;
+  --whatsapp-600: #159a4a;
+  --whatsapp-700: #0f7d3b;
+  --danger-500: #c0392b;
+
+  /* ---- Tipografia ---- */
+  --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* ---- Escala / espaçamento ---- */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --shadow-soft: 0 10px 30px -12px rgba(6, 14, 28, 0.35);
+  --shadow-card: 0 18px 40px -18px rgba(6, 14, 28, 0.45);
+  --container: 1140px;
+}
+
+/* ---------------------------------------------------------------------
+   Reset básico
+--------------------------------------------------------------------- */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  background: var(--metal-50);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+ul { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3, h4 { font-family: var(--font-display); margin: 0; line-height: 1.1; }
+p { margin: 0; }
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.reduced-motion-safe { transition: none !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold-400);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------
+   Textura metálica utilitária (usada em fundos escuros)
+--------------------------------------------------------------------- */
+.metal-texture {
+  background-image:
+    repeating-linear-gradient(115deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 6px),
+    linear-gradient(180deg, var(--navy-950), var(--navy-900));
+}
+
+.route-dots {
+  background-image: radial-gradient(rgba(217,164,65,0.35) 1px, transparent 1.4px);
+  background-size: 16px 16px;
+}
+
+/* ---------------------------------------------------------------------
+   Barra superior (nav)
+--------------------------------------------------------------------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(6, 14, 28, 0.86);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(217, 164, 65, 0.18);
+}
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--metal-50);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+}
+.brand__badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-400);
+  display: grid;
+  place-items: center;
+  color: var(--gold-400);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.brand__badge i { transform: rotate(-45deg); font-size: 0.95rem; }
+.topbar__cta {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--navy-950);
+  background: var(--gold-400);
+  padding: 9px 16px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.topbar__cta:hover { background: var(--gold-300); transform: translateY(-1px); }
+.topbar__cta:active { transform: scale(0.96); }
+
+/* ---------------------------------------------------------------------
+   HERO
+--------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  color: var(--metal-50);
+  overflow: hidden;
+}
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background-image: var(--hero-image, none);
+  background-size: cover;
+  background-position: center 30%;
+}
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(6,10,20,0.55) 0%, rgba(6,12,24,0.72) 45%, var(--navy-950) 96%),
+    linear-gradient(90deg, rgba(6,12,24,0.55) 0%, rgba(6,12,24,0.05) 55%);
+}
+.hero__content {
+  position: relative;
+  z-index: 2;
+  padding: 108px 20px 64px;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-300);
+  border: 1px solid rgba(238, 205, 136, 0.4);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(238, 205, 136, 0.07);
+}
+.hero h1 {
+  margin-top: 20px;
+  font-size: clamp(2.1rem, 7vw, 3.4rem);
+  font-weight: 700;
+  max-width: 14ch;
+  text-wrap: balance;
+}
+.hero h1 span { color: var(--gold-400); }
+.hero__lede {
+  margin-top: 18px;
+  max-width: 46ch;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--metal-200);
+}
+.hero__actions {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  border-radius: 999px;
+  padding: 16px 28px;
+  font-weight: 700;
+  font-size: 0.98rem;
+  letter-spacing: 0.01em;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn-gold {
+  background: linear-gradient(180deg, var(--gold-300), var(--gold-500));
+  color: var(--navy-950);
+  box-shadow: 0 12px 26px -10px rgba(217, 164, 65, 0.55);
+}
+.btn-gold:hover { box-shadow: 0 16px 30px -10px rgba(217, 164, 65, 0.7); transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--metal-50);
+  border: 1.5px solid rgba(245, 247, 250, 0.35);
+}
+.btn-ghost:hover { border-color: var(--gold-400); color: var(--gold-300); }
+
+.hero__flightline { margin-top: 46px; }
+
+/* Linha de rota decorativa (mini, usada no hero) */
+.flightline-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--metal-300);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.flightline-mini .line {
+  flex: 1;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, rgba(217,164,65,0.6) 0 6px, transparent 6px 12px);
+  position: relative;
+}
+.flightline-mini i { color: var(--gold-400); }
+
+/* ---------------------------------------------------------------------
+   Seções gerais
+--------------------------------------------------------------------- */
+.section { padding: 68px 0; }
+.section--dark { background: var(--navy-950); color: var(--metal-50); }
+.section--petrol { background: linear-gradient(180deg, var(--petrol-700), var(--petrol-600)); color: var(--metal-50); }
+.section-head { max-width: 640px; margin: 0 auto 36px; text-align: center; }
+.section-head.left { text-align: left; margin: 0 0 32px; }
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-400);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.section h2 {
+  margin-top: 12px;
+  font-size: clamp(1.6rem, 4.2vw, 2.3rem);
+}
+.section--dark .lede, .section--petrol .lede { color: var(--metal-200); }
+.lede {
+  margin-top: 14px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-700);
+}
+
+/* ---------------------------------------------------------------------
+   Sobre / objetivo
+--------------------------------------------------------------------- */
+.about-grid {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 860px) {
+  .about-grid { grid-template-columns: 1.1fr 0.9fr; align-items: center; }
+}
+.instrument-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(238,205,136,0.18);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+}
+.instrument-card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px dashed rgba(255,255,255,0.14);
+  font-family: var(--font-mono);
+}
+.instrument-card__row:last-child { border-bottom: none; }
+.instrument-card__row .label { color: var(--metal-300); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.instrument-card__row .value { color: var(--gold-300); font-weight: 700; font-size: 0.95rem; text-align: right; }
+
+/* ---------------------------------------------------------------------
+   Prêmio
+--------------------------------------------------------------------- */
+.prize {
+  background: var(--metal-50);
+  color: var(--ink-900);
+}
+.prize-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: grid;
+  grid-template-columns: 1fr;
+  border: 1px solid var(--metal-200);
+}
+@media (min-width: 780px) {
+  .prize-card { grid-template-columns: 1.05fr 0.95fr; }
+}
+.prize-card__media { position: relative; min-height: 260px; }
+.prize-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.prize-card__ribbon {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: var(--gold-400);
+  color: var(--navy-950);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+.prize-card__body { padding: 32px 30px; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+.prize-card__tag { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-500); }
+.prize-card__title { font-size: clamp(1.5rem, 4vw, 2rem); }
+.prize-card__specs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.spec-chip {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: var(--metal-100);
+  border: 1px solid var(--metal-200);
+  color: var(--ink-700);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+/* ---------------------------------------------------------------------
+   Flight route progress (elemento assinatura)
+--------------------------------------------------------------------- */
+.route-panel {
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(238,205,136,0.2);
+  border-radius: var(--radius-lg);
+  padding: 30px 24px 26px;
+}
+.route-panel__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+.route-panel__percent {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 7vw, 3rem);
+  color: var(--gold-300);
+  line-height: 1;
+}
+.route-panel__percent small { font-size: 1rem; color: var(--metal-300); margin-left: 4px; }
+.route-panel__stat { font-family: var(--font-mono); font-size: 0.85rem; color: var(--metal-300); text-align: right; }
+.route-panel__stat b { color: var(--metal-50); }
+
+.flightroute {
+  position: relative;
+  height: 64px;
+  margin: 6px 4px 0;
+}
+.flightroute__track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(90deg, rgba(238,205,136,0.55) 0 8px, transparent 8px 16px);
+}
+.flightroute__fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  background: var(--gold-400);
+  box-shadow: 0 0 10px rgba(217,164,65,0.7);
+  transition: width 1s cubic-bezier(.2,.8,.2,1);
+}
+.flightroute__node {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.flightroute__node.start { left: 0; transform: translate(0, -50%); align-items: flex-start; }
+.flightroute__node.end { left: 100%; transform: translate(-100%, -50%); align-items: flex-end; }
+.flightroute__dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--metal-50); border: 2px solid var(--navy-950);
+  box-shadow: 0 0 0 2px var(--gold-400);
+}
+.flightroute__label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--metal-300);
+  white-space: nowrap;
+}
+.flightroute__plane {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--navy-950);
+  background: var(--gold-400);
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 16px -4px rgba(217,164,65,0.8);
+  transition: left 1s cubic-bezier(.2,.8,.2,1);
+  z-index: 2;
+}
+.flightroute__plane i { transform: rotate(90deg); font-size: 0.95rem; }
+
+/* ---------------------------------------------------------------------
+   Grade de números
+--------------------------------------------------------------------- */
+.numbers-section { background: var(--metal-50); }
+
+.selection-bar {
+  position: sticky;
+  top: 61px;
+  z-index: 40;
+  background: rgba(245, 247, 250, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--metal-200);
+  padding: 14px 0;
+}
+.selection-bar__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.selection-bar__row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: space-between; }
+.search-field {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+.search-field input {
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  border-radius: 999px;
+  border: 1.5px solid var(--metal-200);
+  background: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--ink-900);
+}
+.search-field input:focus { border-color: var(--gold-500); outline: none; }
+.search-field i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--ink-500); }
+
+.count-pill {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--ink-700);
+  background: var(--metal-100);
+  border: 1px solid var(--metal-200);
+  padding: 9px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.count-pill b { color: var(--petrol-600); }
+
+.legend { display: flex; gap: 16px; flex-wrap: wrap; }
+.legend__item { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; color: var(--ink-700); }
+.legend__swatch { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--metal-300); }
+.legend__swatch.available { background: #fff; }
+.legend__swatch.selected { background: var(--gold-400); border-color: var(--gold-500); }
+.legend__swatch.reserved { background: var(--reserved-500); border-color: var(--reserved-500); }
+
+.tickets-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+.tickets-strip:empty::after {
+  content: 'Nenhum número selecionado ainda — toque em um número disponível abaixo.';
+  font-size: 0.82rem;
+  color: var(--ink-500);
+  font-style: italic;
+}
+.ticket-chip {
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--navy-950);
+  background: var(--gold-300);
+  border: 1px dashed var(--gold-500);
+  padding: 7px 12px 7px 14px;
+  border-radius: 8px;
+}
+.ticket-chip::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px; height: 9px;
+  background: var(--metal-50);
+  border-radius: 50%;
+  border: 1px solid var(--gold-500);
+}
+.ticket-chip button {
+  background: none; border: none; color: var(--navy-950); opacity: 0.6;
+  display: grid; place-items: center; padding: 0;
+}
+.ticket-chip button:hover { opacity: 1; }
+
+.grid-wrap { padding: 26px 0 10px; }
+.numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+  gap: 8px;
+}
+.num-btn {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 12px 4px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--metal-200);
+  background: #fff;
+  color: var(--ink-700);
+  transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  text-align: center;
+}
+.num-btn:hover:not(:disabled) { border-color: var(--gold-500); transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+.num-btn:active:not(:disabled) { transform: scale(0.94); }
+.num-btn[data-status="reservado"], .num-btn[data-status="pago"] {
+  background: var(--reserved-500);
+  border-color: var(--reserved-500);
+  color: rgba(255,255,255,0.55);
+  cursor: not-allowed;
+}
+.num-btn[data-selected="true"] {
+  background: var(--gold-400);
+  border-color: var(--gold-500);
+  color: var(--navy-950);
+  box-shadow: 0 6px 14px -6px rgba(217,164,65,0.7);
+}
+.num-btn.is-hidden { display: none; }
+
+.empty-search {
+  text-align: center;
+  padding: 40px 10px;
+  color: var(--ink-500);
+  font-size: 0.9rem;
+  display: none;
+}
+.empty-search.show { display: block; }
+
+/* Barra de ação flutuante (mobile-first, tipo app) */
+.action-dock {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 70;
+  transform: translateY(120%);
+  transition: transform 0.28s cubic-bezier(.2,.8,.2,1);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(6, 14, 28, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(217,164,65,0.3);
+}
+.action-dock.is-visible { transform: translateY(0); }
+.action-dock__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: space-between;
+}
+.action-dock__count { color: var(--metal-50); font-family: var(--font-mono); font-size: 0.85rem; }
+.action-dock__count b { color: var(--gold-300); font-size: 1.1rem; }
+.btn-whatsapp {
+  background: linear-gradient(180deg, var(--whatsapp-600), var(--whatsapp-700));
+  color: #fff;
+  box-shadow: 0 10px 24px -8px rgba(21,154,74,0.6);
+  flex-shrink: 0;
+}
+.btn-whatsapp:hover { box-shadow: 0 14px 28px -8px rgba(21,154,74,0.75); }
+.btn-block { width: 100%; justify-content: center; }
+
+/* ---------------------------------------------------------------------
+   Como funciona / rodapé
+--------------------------------------------------------------------- */
+.steps {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 780px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.step-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(238,205,136,0.16);
+  border-radius: var(--radius-md);
+  padding: 22px;
+}
+.step-card__icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: rgba(217,164,65,0.14);
+  color: var(--gold-400);
+  display: grid; place-items: center;
+  margin-bottom: 14px;
+  font-size: 1.05rem;
+}
+.step-card h3 { font-size: 1.02rem; margin-bottom: 8px; }
+.step-card p { color: var(--metal-300); font-size: 0.9rem; line-height: 1.55; }
+
+.site-footer {
+  background: var(--navy-950);
+  color: var(--metal-300);
+  padding: 40px 0 28px;
+  text-align: center;
+  border-top: 1px solid rgba(238,205,136,0.14);
+}
+.site-footer .brand { justify-content: center; margin-bottom: 10px; }
+.site-footer small { font-size: 0.78rem; opacity: 0.7; }
+.footer-admin-link { font-size: 0.72rem; opacity: 0.45; margin-top: 10px; display: inline-block; }
+.footer-admin-link:hover { opacity: 0.8; }
+
+/* ---------------------------------------------------------------------
+   Utilidades
+--------------------------------------------------------------------- */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+@media (min-width: 780px) {
+  .hero__content { padding: 148px 20px 96px; }
+  .section { padding: 96px 0; }
+}

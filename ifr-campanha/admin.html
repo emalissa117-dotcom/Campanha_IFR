@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área administrativa — Campanha Horas de Voo IFR</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+<!-- =========================== TELA DE LOGIN =========================== -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <span class="brand__badge" style="margin:0 auto 18px; color:var(--gold-400); border-color:var(--gold-400);">
+      <i class="fa-solid fa-lock"></i>
+    </span>
+    <h1>Área administrativa</h1>
+    <p class="lede" style="color:var(--metal-300); text-align:center;">Acesso restrito à organização da campanha.</p>
+    <form id="loginForm">
+      <label for="passwordInput" class="sr-only">Senha</label>
+      <input type="password" id="passwordInput" placeholder="Senha de acesso" autocomplete="current-password" required>
+      <button type="submit" class="btn btn-gold btn-block"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
+      <p id="loginError" class="login-error"></p>
+    </form>
+    <p class="login-hint">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      Senha padrão de demonstração: <code>123456</code>. Troque-a em <code>js/admin.js</code>
+      (constante <code>ADMIN_PASSWORD</code>) antes de publicar — esta é uma proteção simples,
+      não uma autenticação segura de verdade.
+    </p>
+  </div>
+</div>
+
+<!-- =========================== PAINEL =========================== -->
+<div id="dashboard" class="dashboard" hidden>
+
+  <header class="admin-topbar">
+    <div class="admin-topbar__inner">
+      <span class="brand">
+        <span class="brand__badge"><i class="fa-solid fa-plane"></i></span>
+        Painel · Campanha IFR
+      </span>
+      <div class="admin-topbar__actions">
+        <a href="index.html" class="btn btn-ghost btn-sm" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver site</a>
+        <button id="logoutBtn" class="btn btn-ghost btn-sm"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-main container">
+
+    <!-- Aviso sobre publicação em hospedagem estática -->
+    <div class="callout">
+      <i class="fa-solid fa-circle-info"></i>
+      <div>
+        <strong>Como publicar as alterações:</strong> tudo o que você edita aqui fica salvo
+        neste navegador (armazenamento local). Para que os visitantes do site vejam as mudanças,
+        clique em <strong>“Baixar numbers.json atualizado”</strong> e substitua o arquivo
+        <code>data/numbers.json</code> na sua hospedagem (GitHub Pages, Netlify, etc.).
+      </div>
+    </div>
+
+    <!-- Estatísticas -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-card__label">Total de números</span>
+        <span class="stat-card__value" id="statTotal">1000</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__label">Disponíveis</span>
+        <span class="stat-card__value" id="statAvailable">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__label">Reservados</span>
+        <span class="stat-card__value" id="statReserved">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__label">Pagos</span>
+        <span class="stat-card__value" id="statPaid">0</span>
+      </div>
+      <div class="stat-card stat-card--accent">
+        <span class="stat-card__label">Progresso</span>
+        <span class="stat-card__value" id="statPercent">0%</span>
+      </div>
+    </section>
+
+    <!-- Ações de dados -->
+    <section class="data-actions">
+      <button id="exportBtn" class="btn btn-gold btn-sm"><i class="fa-solid fa-download"></i> Baixar numbers.json atualizado</button>
+      <label class="btn btn-ghost btn-sm" for="importInput"><i class="fa-solid fa-upload"></i> Importar numbers.json</label>
+      <input type="file" id="importInput" accept="application/json" class="sr-only">
+      <button id="resetBtn" class="btn btn-ghost btn-sm btn-danger"><i class="fa-solid fa-rotate-left"></i> Zerar todas as reservas</button>
+    </section>
+
+    <!-- Filtros -->
+    <section class="table-filters">
+      <div class="search-field">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="adminSearch" placeholder="Buscar por número, nome, telefone ou Instagram">
+      </div>
+      <select id="statusFilter">
+        <option value="todos">Todos os status</option>
+        <option value="disponivel">Disponível</option>
+        <option value="reservado">Reservado</option>
+        <option value="pago">Pago</option>
+      </select>
+    </section>
+
+    <!-- Tabela -->
+    <section class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Instagram</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+      <p class="empty-search" id="adminEmpty">Nenhum resultado encontrado.</p>
+    </section>
+
+    <!-- Paginação -->
+    <nav class="pagination" id="pagination" aria-label="Paginação da tabela"></nav>
+
+  </main>
+</div>
+
+<!-- =========================== MODAL DE EDIÇÃO =========================== -->
+<div id="editModal" class="modal-overlay" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card__head">
+      <h2 id="modalTitle">Editar número <span id="modalNumber"></span></h2>
+      <button id="modalClose" class="modal-close" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="editForm">
+      <input type="hidden" id="editNumber">
+      <label>Nome
+        <input type="text" id="editName" placeholder="Nome do participante">
+      </label>
+      <label>Telefone
+        <input type="tel" id="editPhone" placeholder="(00) 00000-0000">
+      </label>
+      <label>Instagram
+        <input type="text" id="editInstagram" placeholder="@usuario">
+      </label>
+      <label>Status
+        <select id="editStatus">
+          <option value="disponivel">Disponível</option>
+          <option value="reservado">Reservado</option>
+          <option value="pago">Pago</option>
+        </select>
+      </label>
+      <div class="modal-actions">
+        <button type="button" id="cancelReservationBtn" class="btn btn-ghost btn-sm btn-danger">
+          <i class="fa-solid fa-ban"></i> Cancelar reserva
+        </button>
+        <button type="submit" class="btn btn-gold btn-sm">
+          <i class="fa-solid fa-floppy-disk"></i> Salvar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
